@@ -11,15 +11,22 @@ const CartScreen = ({ match, location, history }) => {
   const qty = location.search ? Number(location.search.split('=')[1]) : 1
 
   const dispatch = useDispatch()
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const cart = useSelector((state) => state.cart)
   const { cartItems } = cart
 
   useEffect(() => {
+    if (!userInfo) {
+      history.push("/login");
+    }
+    else{
     if (productId) {
       dispatch(addToCart(productId, qty))
     }
-  }, [dispatch, productId, qty])
+  }
+  }, [dispatch, productId, qty, history, userInfo])
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id))
